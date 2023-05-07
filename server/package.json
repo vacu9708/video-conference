@@ -1,0 +1,17 @@
+{
+  "name": "zoom-clone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "uuidv4": "^6.2.13",
+    "ws": "^8.11.0"
+  }
+}
