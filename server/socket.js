@@ -67,7 +67,7 @@ const init=(server)=>{
             name='guest'+my_ws.clients_info.size.toString()
         my_ws.rooms.get(json.roomID).set(client, name)
         my_ws.clients_info.set(client, [name, json.roomID, null])
-        const msg=JSON.stringify({target: "participant", name: name, msg: "has entered the room!!!", participants: my_ws.get_participants(json.roomID)})
+        const msg=JSON.stringify({target: "participant", name: name, msg: "has entered the room!!", participants: my_ws.get_participants(json.roomID)})
         my_ws.broadcast(json.roomID, msg)
     })
     my_ws.on('chat_msg', (client, json)=>{
