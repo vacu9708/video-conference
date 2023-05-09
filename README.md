@@ -5,11 +5,18 @@ React, typescript
 - HTTPS connection for secure video call
 - websocket: for real-time chat, broker of webRTC
 - webRTC: for real-time video, audio streaming
-### other tools
+# other tools
 - Docker
 - AWS EC2
 - Jenkins
 
+# CI/CD architecture
+![image](https://github.com/vacu9708/video-conference/assets/67142421/95e6b781-56ac-488f-aaa3-82f98e556b06)
+
+# Page for creating a conference room
+![image](https://github.com/vacu9708/video-conference/assets/67142421/f52e20b6-92ee-43cd-904e-822bef206e13)
+
+# Conference room
 ![image](https://user-images.githubusercontent.com/67142421/205711740-6953fe9b-8180-4f71-ad41-c967d2c968e9.png)
 
 # What I learned
