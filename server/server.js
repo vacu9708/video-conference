@@ -24,7 +24,7 @@ const port = process.env.PORT || 443
 server.listen(port, (err) => {
   if (err) 
     return console.log(err);
-  console.log('server running on  '+port)
+  console.log('server running on '+port)
 });
 
 const server_socket=socket.init(server)
