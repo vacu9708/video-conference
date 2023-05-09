@@ -6,8 +6,9 @@ React, typescript
 - websocket: for real-time chat, broker of webRTC
 - webRTC: for real-time video, audio streaming
 ### other tools
-- docker
+- Docker
 - AWS EC2
+- Jenkins
 
 ![image](https://user-images.githubusercontent.com/67142421/205711740-6953fe9b-8180-4f71-ad41-c967d2c968e9.png)
 
