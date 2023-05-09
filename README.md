@@ -1,8 +1,8 @@
 # Frontend
 React, typescript
 # Backend
-- HTTPS connection for secure video call
 - express.js
+- HTTPS connection for secure video call
 - websocket: for real-time chat, broker of webRTC
 - webRTC: for real-time video, audio streaming
 ### other tools
