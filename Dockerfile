@@ -17,7 +17,7 @@ COPY client/ /app/client/
 COPY server/ /app/server/
 
 # Build the client code
-RUN cd client && sudo npm run build
+#RUN cd client && npm run build
 
 # Set the environment variables for the server
 ENV PORT=443
