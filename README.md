@@ -10,8 +10,10 @@ React, typescript
 - AWS EC2
 - Jenkins
 
-# CI/CD architecture
+# Architecture
 ![image](https://github.com/vacu9708/video-conference/assets/67142421/95e6b781-56ac-488f-aaa3-82f98e556b06)
+
+![image](https://github.com/vacu9708/video-conference/assets/67142421/2c94c5b5-a976-4b8a-946a-d78a486b0aeb)
 
 # Page for creating a conference room
 ![image](https://github.com/vacu9708/video-conference/assets/67142421/f52e20b6-92ee-43cd-904e-822bef206e13)
