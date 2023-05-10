@@ -15,9 +15,9 @@ const Room = () => {
   React.useEffect(()=>{
     // Find roomID
     let url=window.location.href
-    let p=url.length-1
-    while(url[p]!=='/') p--
-    sessionStorage.setItem('roomID', url.substring(p+1, url.length))
+    let start_of_UUID=url.length-1
+    while(url[start_of_UUID]!=='/') start_of_UUID--
+    sessionStorage.setItem('roomID', url.substring(start_of_UUID+1, url.length))
 
     ws.on('err', (json: any)=>{
       // window.location.reload()
