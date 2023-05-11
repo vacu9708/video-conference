@@ -19,7 +19,8 @@
         this.ws.onmessage=(msg: any)=>{
             // console.log(msg.data)
             let json: any=JSON.parse(msg.data)
-            this.targets.get(json.target)(json)
+            if(this.targets.has(json.target))
+                this.targets.get(json.target)(json)
         }
     }
     on(target: string, callback: (json: any)=>void){

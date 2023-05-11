@@ -23,7 +23,7 @@ class My_websocket extends websocket.Server{
 
 class Room_manager{
     constructor(server){
-        this.rooms=new Map() // <roomID, Map<room, [client, name]>>
+        this.rooms=new Map() // <roomID, [client, name]>>
         this.clients_info=new Map() // <client, [name, roomID, peerID]>
         this.connected_ips=new Map() // <IP, bool>
 
@@ -31,17 +31,17 @@ class Room_manager{
         this.server_socket.on('connection', (client, req)=>{
             console.log('hi')
             // Prevent multiple connections from one IP
-            if(this.connected_ips.has(req.socket.remoteAddress)){
-                client.send(`{"target": "err", "msg": "Existing IP${req.socket.remoteAddress}"}`)
+            if(this.connected_ips.has(req.socket)){
+                client.send(`{"target": "err", "msg": "Existing IP${req.socket}"}`)
                 client.close()
                 return
             }
-            this.connected_ips.set(req.socket.remoteAddress, true)
+            this.connected_ips.set(req.socket, true)
             this.server_socket.msg_handler(client)
             
             client.on('close', (code, reason)=>{
                 try{
-                    this.connected_ips.delete(req.socket.remoteAddress)
+                    this.connected_ips.delete(req.socket)
                     const roomID=this.clients_info.get(client)[1]
                     const name=this.clients_info.get(client)[0]
                     console.log(`${name} left the room`)
@@ -74,17 +74,19 @@ class Room_manager{
 
     set_msg_targets=()=>{ // Setup the target functions of incoming messages
         this.server_socket.on_msg('join_room', (client, json)=>{
+            if (!this.rooms.has(json.roomID)) // Room doesn't exist
+                return
             let name=json.name
             if(!name || name=='null')
                 name='guest'+this.clients_info.size.toString()
-                this.rooms.get(json.roomID).set(client, name)
+                this.rooms.get(json.roomID).set(client, name) // Add a client to the room
             this.clients_info.set(client, [name, json.roomID, null])
             const msg=JSON.stringify({target: "participant", name: name, msg: "has entered the room", participants: this.get_participants(json.roomID)})
             this.broadcast(json.roomID, msg)
         })
         this.server_socket.on_msg('chat_msg', (client, json)=>{
             const roomID=this.clients_info.get(client)[1]
-            const msg=JSON.stringify({target: 'chat_msg', 'name': this.clients_info.get(client)[0], 'msg': json.msg})
+            const msg=JSON.stringify({target: 'chat_msg', name: this.clients_info.get(client)[0], msg: json.msg})
             this.broadcast(roomID, msg)
             // broadcast(`{"target": "msg", "name": "${clients_info.get(client)[0]}", "msg": "${json.msg}"}`) // doesn't work
         })
@@ -95,6 +97,7 @@ class Room_manager{
             console.log(`${this.clients_info.get(client)[0]} joined as a peer`)
             this.clients_info.get(client)[2]=json.peerID
             const roomID=this.clients_info.get(client)[1]
+            // Broadcast the new peer
             const msg=JSON.stringify({target: 'new_peer', peerID: json.peerID})
             this.broadcast(roomID, msg, client)
         })

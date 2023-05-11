@@ -15,9 +15,9 @@ const Room = () => {
   React.useEffect(()=>{
     // Find roomID
     let url=window.location.href
-    let start_of_UUID=url.length-1
-    while(url[start_of_UUID]!=='/') start_of_UUID--
-    sessionStorage.setItem('roomID', url.substring(start_of_UUID+1, url.length))
+    let start_of_roomID=url.length-1
+    while(url[start_of_roomID]!=='/') start_of_roomID--
+    sessionStorage.setItem('roomID', url.substring(start_of_roomID+1, url.length))
 
     ws.on('err', (json: any)=>{
       // window.location.reload()
@@ -35,7 +35,7 @@ const Room = () => {
       messages_ref.current=[...messages_ref.current, json]
       set_messages(messages_ref.current)
     })
-    const interval=setInterval(()=>{
+    const interval=setInterval(()=>{ // Wait until the websocket is open to join the room
       if(ws.is_open){
         ws.send(JSON.stringify({target: "join_room", name: sessionStorage.getItem('name'), roomID: sessionStorage.getItem('roomID')}))
         clearInterval(interval)
@@ -52,6 +52,7 @@ const Room = () => {
       return
     e.preventDefault()
     ws.send(JSON.stringify({target: 'chat_msg', msg: input_msg}))
+    //ws.send(JSON.stringify({target: 'chat_msg', name: sessionStorage.getItem('name'), msg: input_msg}))
     set_input_msg('')
   }
 

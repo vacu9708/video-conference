@@ -2,9 +2,9 @@ import React from 'react'
 
 const find_roomID=()=>{
     let url=window.location.href
-    let start_of_UUID=url.length-1
-    while(url[start_of_UUID]!=='/') start_of_UUID--
-    return url.substring(start_of_UUID+1, url.length)
+    let start_of_roomID=url.length-1
+    while(url[start_of_roomID]!=='/') start_of_roomID--
+    return url.substring(start_of_roomID+1, url.length)
 }
 
 const DoorToRoom=()=>{
