@@ -15,7 +15,7 @@ app.use(express.static(react_path))
 
 const options = { 
   key: fs.readFileSync('./keys/privkey.pem'),
-  cert: fs.readFileSync('./keys/fullchain.pem'),
+  cert: fs.readFileSync('./keys/fullchain.pem'),//
 }
 // const server = http.createServer(app);
 const server = https.createServer(options, app);
