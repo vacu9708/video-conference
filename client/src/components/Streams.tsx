@@ -46,7 +46,7 @@ const Streams=({ws}: ws_)=>{
     }
 
     React.useEffect(()=>{
-        navigator.mediaDevices.getUserMedia({audio: true, video: true})
+        navigator.mediaDevices.getUserMedia({audio: true, video: true})//
         .then(my_stream_ => {
             my_stream=my_stream_
             const my_video = document.createElement('video')
