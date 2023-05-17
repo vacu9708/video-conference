@@ -27,5 +27,6 @@ At first, clients do not know where they are. User2's information is sent to Use
 ![image](https://user-images.githubusercontent.com/67142421/205711740-6953fe9b-8180-4f71-ad41-c967d2c968e9.png)
 
 # Future plan
-- Add login/registration page
-- Only authenticated clients can create only one room.
+- Add login/registration page to store the nickname.
+- Only authenticated clients can create one room(one room per socket)
+- If the room creater exists, the room is closed
