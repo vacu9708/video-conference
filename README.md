@@ -31,6 +31,6 @@ At first, clients do not know where they are. User2's information is sent to Use
 # Future plan
 - Add login/registration page to store the nickname.
 - Only authenticated clients can create one room(one room per socket)
-- If the room creater exists, the room is closed
+- The room is closed when the room creater exits.
 - Think about preventing CSRF, XSS attacks
 - Deprecating node.js code and rewriting all the code in spring boot
