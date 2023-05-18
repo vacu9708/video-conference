@@ -11,7 +11,9 @@ React, Typescript
 - Jenkins
 
 # Architecture
+### CI/CD
 ![image](https://github.com/vacu9708/video-conference/assets/67142421/95e6b781-56ac-488f-aaa3-82f98e556b06)<br>
+### Modules
 ![image](https://github.com/vacu9708/video-conference/assets/67142421/13e663ee-e3cb-421e-93ef-4d89d6d7809b)<br>
 
 At first, clients do not know where they are. User2's information is sent to User1 through the signaling server to establish a direct peer to peer connection between clients.<br>
