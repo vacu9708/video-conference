@@ -136,8 +136,6 @@ const Streams=({ws}: My_websocket_)=>{
             ws.send(JSON.stringify({ target: "join_RTC" }));
         };
         webRTC_init_()
-
-        
     },[ws])
 
     // React.useEffect(()=>{

@@ -31,11 +31,11 @@ class Room_manager{
         this.server_socket.on('connection', (client, req)=>{
             console.log('hi')
             // Prevent multiple connections from one IP
-            // if(this.connected_ips.has(req.socket)){
-            //     client.send(`{"target": "err", "msg": "Existing IP${req.socket}"}`)
-            //     client.close()
-            //     return
-            // }
+            if(this.connected_ips.has(req.socket)){
+                client.send(`{"target": "err", "msg": "Existing IP${req.socket}"}`)
+                client.close()
+                return
+            }
             this.connected_ips.set(req.socket, true)
             this.server_socket.msg_handler(client)
             
@@ -91,7 +91,7 @@ class Room_manager{
         this.server_socket.on_msg('join_RTC', (client, parsed)=>{
             // Broadcast new peer's offer
             const roomID=this.clients_info.get(client)[1]
-            const msg=JSON.stringify({target: 'new_peer'})
+            const msg=JSON.stringify({target: 'new_peer'}) // Specify the new_peer's IP in order not to just broadcast offers 
             this.broadcast(roomID, msg, client)
             console.log(`${this.clients_info.get(client)[0]} joined as a peer`)
         })
