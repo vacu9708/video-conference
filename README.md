@@ -17,6 +17,7 @@ React, Typescript
 ![image](https://github.com/vacu9708/video-conference/assets/67142421/13e663ee-e3cb-421e-93ef-4d89d6d7809b)<br>
 ### WebRTC
 At first, clients do not know where they are. User2's information is sent to User1 through the signaling server to establish a direct peer to peer connection between clients.<br>
+The STUN server enables clients to find out their public IP address.<br>
 ![image](https://github.com/vacu9708/video-conference/assets/67142421/ef8e44a8-ee2b-4b15-98bb-e1566496f0cf)
 
 
