@@ -17,7 +17,8 @@ React, Typescript
 ![image](https://github.com/vacu9708/video-conference/assets/67142421/13e663ee-e3cb-421e-93ef-4d89d6d7809b)<br>
 ### WebRTC
 At first, clients do not know where they are. User2's information is sent to User1 through the signaling server to establish a direct peer to peer connection between clients.<br>
-![image](https://github.com/vacu9708/video-conference/assets/67142421/c13a5feb-39b0-4852-a745-44c3f9bbd38d)<br>
+![image](https://github.com/vacu9708/video-conference/assets/67142421/ef8e44a8-ee2b-4b15-98bb-e1566496f0cf)
+
 
 # WebRTC and Websocket
 ![image](https://github.com/vacu9708/video-conference/assets/67142421/ef40bb16-f8a0-4c98-8f1b-9b20d589bbac)
@@ -29,7 +30,6 @@ At first, clients do not know where they are. User2's information is sent to Use
 ![image](https://user-images.githubusercontent.com/67142421/205711740-6953fe9b-8180-4f71-ad41-c967d2c968e9.png)
 
 # Future plan
-- "New room" creates a room and put the creator into the room. The room is closed when the creater exits.
 - Deprecate node.js code and rewrite all the code in spring boot
 - Add login/registration page to store the nickname.
 - Think about preventing CSRF, XSS attacks
