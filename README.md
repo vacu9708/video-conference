@@ -29,7 +29,6 @@ At first, clients do not know where they are. User2's information is sent to Use
 ![image](https://user-images.githubusercontent.com/67142421/205711740-6953fe9b-8180-4f71-ad41-c967d2c968e9.png)
 
 # Future plan
-- "New room" creates a room and put the creator into the room. The room is closed when the creater exits.
 - Deprecate node.js code and rewrite all the code in spring boot
 - Add login/registration page to store the nickname.
 - Think about preventing CSRF, XSS attacks
