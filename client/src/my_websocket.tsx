@@ -15,10 +15,11 @@ class My_websocket extends WebSocket{
             console.log(error)
         }
         this.onmessage=(msg: any)=>{
-            // console.log(msg.data)
-            let json: any=JSON.parse(msg.data)
-            if(this.targets.has(json.target))
-                this.targets.get(json.target)(json)
+            let parsed: any=JSON.parse(msg.data)
+            if(this.targets.has(parsed.target)){
+                // console.log(parsed.target)
+                this.targets.get(parsed.target)(parsed)
+            }
         }
     }
     on(target: string, callback: (json: any)=>void){

@@ -24,7 +24,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "GENERATE_SOURCEMAP=false npx react-scripts build",
+    "build": "npx react-scripts build",
+    "build_docker": "GENERATE_SOURCEMAP=false npx react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
