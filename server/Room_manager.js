@@ -23,9 +23,9 @@ class My_websocket extends websocket.Server{
 
 class Room_manager{
     constructor(server){
-        this.rooms=new Map() // <roomID, [client, name]>>
-        this.clients_info=new Map() // <client, [name, roomID, peerID]>
-        this.connected_ips=new Map() // <IP, bool>
+        this.rooms=new Map() // <roomID, []<client, name>>
+        this.clients_info=new Map() // <client, []<name, roomID, peerID>>
+        this.connected_ips=new Map() // []<IP, bool>
 
         this.server_socket=new My_websocket(server)
         this.server_socket.on('connection', (client, req)=>{
@@ -42,15 +42,22 @@ class Room_manager{
             client.on('close', (code, reason)=>{
                 try{
                     this.connected_ips.delete(req.socket)
+                    
                     const roomID=this.clients_info.get(client)[1]
                     const name=this.clients_info.get(client)[0]
-                    console.log(`${name} left the room`)
+                    // Disconnetion message to the chat box
                     this.rooms.get(roomID).delete(client)
                     let msg=JSON.stringify({target: "participant", name: name, msg: "has left the room", participants: this.get_participants(roomID)})
                     this.broadcast(roomID, msg)
+                    console.log(`${name} left the room`)
+                    // webRTC disconnection
                     msg=JSON.stringify({target: 'peer_disconnected', peerID: this.clients_info.get(client)[2]})
                     this.broadcast(roomID, msg)
+                    
                     this.clients_info.delete(client)
+                    // Delete the room if empty
+                    if(this.rooms.get(roomID).size===0)
+                        this.rooms.delete(roomID)
                 }catch{}
             })
         })
@@ -74,13 +81,17 @@ class Room_manager{
 
     set_msg_targets=()=>{ // Setup the target functions of incoming messages
         this.server_socket.on_msg('join_room', (client, json)=>{
-            if (!this.rooms.has(json.roomID)) // Room doesn't exist
+            if (!this.rooms.has(json.roomID)){// If invalid room
+                client.close()
                 return
+            }
             let name=json.name
             if(!name || name=='null')
                 name='guest'+this.clients_info.size.toString()
-                this.rooms.get(json.roomID).set(client, name) // Add a client to the room
-            this.clients_info.set(client, [name, json.roomID, null])
+
+            this.rooms.get(json.roomID).set(client, name) // Add the client to the room
+            this.clients_info.set(client, [name, json.roomID, null]) // Set client's info
+
             const msg=JSON.stringify({target: "participant", name: name, msg: "has entered the room", participants: this.get_participants(json.roomID)})
             this.broadcast(json.roomID, msg)
         })
@@ -91,15 +102,15 @@ class Room_manager{
             // broadcast(`{"target": "msg", "name": "${clients_info.get(client)[0]}", "msg": "${json.msg}"}`) // doesn't work
         })
         this.server_socket.on_msg('uuid', (client, json)=>{
-            client.send(JSON.stringify({target: "uuid", uuid: v4()}))
+            const uuid=v4()
+            client.send(JSON.stringify({target: "uuid", uuid: uuid}))
+            this.clients_info.get(client)[2]=uuid
         })
-        this.server_socket.on_msg('new_peer', (client, json)=>{
-            console.log(`${this.clients_info.get(client)[0]} joined as a peer`)
-            this.clients_info.get(client)[2]=json.peerID
+        this.server_socket.on_msg('new_peer', (client, json)=>{ 
             const roomID=this.clients_info.get(client)[1]
-            // Broadcast the new peer
             const msg=JSON.stringify({target: 'new_peer', peerID: json.peerID})
             this.broadcast(roomID, msg, client)
+            console.log(`${this.clients_info.get(client)[0]} joined as a peer`)
         })
     }
 }

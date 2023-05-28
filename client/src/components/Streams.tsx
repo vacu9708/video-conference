@@ -1,13 +1,13 @@
 import React from "react";
-import My_websocket from '../my_websocket'
+import My_websocket from '../My_websocket'
 import Peer from 'peerjs'
 
 let peers=new Map()
 let my_stream: MediaStream
-interface ws_{
+interface My_websocket_{
     ws: My_websocket
-  }
-const Streams=({ws}: ws_)=>{
+}
+const Streams=({ws}: My_websocket_)=>{
     const video_grid=React.useRef<any>()
     const [play_toggled, set_play_toggled]=React.useState(false)
     const [mute_toggled, set_mute_toggled]=React.useState(false)
@@ -41,9 +41,20 @@ const Streams=({ws}: ws_)=>{
     }
 
     const leave_meeting=()=>{
-        ws.ws.close()
+        ws.close()
         window.location.href='/'
     }
+
+    const copy_room_address=async()=>{
+        const textArea = document.createElement("textarea");
+        textArea.value = window.location.href;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand("Copy");
+        document.body.removeChild(textArea);
+        //await navigator.clipboard.writeText(created_roomID);
+      }
 
     React.useEffect(()=>{
         navigator.mediaDevices.getUserMedia({audio: true, video: true})//
@@ -104,8 +115,8 @@ const Streams=({ws}: ws_)=>{
     return(
         <>
         <div className="video_grid" ref={video_grid}></div>
-        <div className="controller">
-            <div className="stream_control_block">
+        <div className="control_bar">
+            <div className="control_block">
                 {play_toggled?
                 <div onClick={toggle_play} className="play stream_control_button" >
                     <img src='/icons/video.webp' alt=""/>
@@ -127,14 +138,14 @@ const Streams=({ws}: ws_)=>{
                     <span>Mute</span>
                 </div>}
             </div>
-            <div className="stream_control_block">
+            <div className="control_block">
                 <div className="stream_control_button">
                     <img src='/icons/participants.webp' alt=""/>
                     <span>Participants</span>
                 </div>
-                <div className="stream_control_button">
+                <div onClick={copy_room_address} className="stream_control_button">
                     <img src='/icons/chat.webp' alt=""/>
-                    <span>Chat</span>
+                    <span>Copy room address</span>
                 </div>
             </div>
             <div onClick={leave_meeting} className="leave_meetig stream_control_button">

@@ -1,7 +1,7 @@
 import React from "react";
 import Messages from '../components/Messages'
 import {Msg} from '../components/Messages'
-import My_websocket from '../my_websocket'
+import My_websocket from '../My_websocket'
 import Streams from '../components/Streams'
 
 const Room = () => {
@@ -47,7 +47,7 @@ const Room = () => {
     message_window.current.scrollTop = message_window.current.scrollHeight
   },[messages])
 
-  const send_msg=(e: any)=>{
+  const send_msg=(e: React.KeyboardEvent)=>{
     if(e.key!=='Enter')
       return
     e.preventDefault()

@@ -19,7 +19,7 @@
             justify-content: left;
             background-color: black;
         }
-        .controller{
+        .control_bar{
             height: 15%;
             display: flex;
             background-color: grey;
@@ -28,12 +28,12 @@
             padding: 5px;
             font-size: 22px;
         }
-        /* Prevent text blue selection of controller */
-        .controller ::selection {
+        /* Prevent text blue selection of control_bar */
+        .control_bar ::selection {
             color: none;
             background: none;
         }
-            .stream_control_block{
+            .control_block{
                 display: flex;
             }
                 .stream_control_button{
