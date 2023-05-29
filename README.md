@@ -21,7 +21,7 @@ React, Typescript
 ### Modules
 ![image](https://github.com/vacu9708/video-conference/assets/67142421/13e663ee-e3cb-421e-93ef-4d89d6d7809b)<br>
 # WebRTC process
-![image](https://github.com/vacu9708/video-conference/assets/67142421/2b272e18-0118-4457-a3b6-61fcaaf16d12)
+![image](https://github.com/vacu9708/video-conference/assets/67142421/0158a51c-295e-4be7-ab8d-47e9f7f7f2db)
 ### Signaling server:
 Initially, clients are not aware of where they are. This is why the signaling server is necessary.<br>
 The signaling server acts as an intermediary that helps clients exchange their network information to establish a direct peer-to-peer connection.<br>
