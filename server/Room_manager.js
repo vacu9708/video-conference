@@ -121,7 +121,7 @@ class Room_manager{
         });
 
         this.server_socket.on_msg("ice_candidate", (client, parsed) => {
-            console.log(this.clients_info.get(this.peerID_to_client.get(parsed.sending_peerID))[0] + this.clients_info.get(this.peerID_to_client.get(parsed.receiving_peerID))[0])
+            //console.log(this.clients_info.get(this.peerID_to_client.get(parsed.sending_peerID))[0] + this.clients_info.get(this.peerID_to_client.get(parsed.receiving_peerID))[0])
             const receiving_peer_client=this.peerID_to_client.get(parsed.receiving_peerID)
             const msg=JSON.stringify({target: "ice_candidate", ice_candidate: parsed.ice_candidate, sending_peerID: parsed.sending_peerID})
             receiving_peer_client.send(msg)

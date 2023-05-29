@@ -110,7 +110,7 @@ const Streams=({ws}: My_websocket_)=>{
             peer_connections.set(parsed.new_peerID, peer_connection);
             // Create an offer
             const offer = await peer_connection.createOffer();
-            peer_connection.setLocalDescription(offer); // Begin preparing for the ice candidate
+            peer_connection.setLocalDescription(offer);
             // Send the offer
             ws.send(JSON.stringify({target: "offer", offer: offer, new_peerID: parsed.new_peerID, offering_peerID: peerID}))
             console.log("sent an offer to a remote peer");
