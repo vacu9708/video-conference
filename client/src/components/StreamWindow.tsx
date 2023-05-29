@@ -1,9 +1,11 @@
 import React from "react";
 import My_websocket from '../My_websocket'
+import uuid from 'react-uuid'
 
 let my_stream: MediaStream
-let my_peer_connection: RTCPeerConnection
-let my_data_channel: RTCDataChannel
+const peer_connections = new Map<string, RTCPeerConnection>()
+// let my_data_channel: RTCDataChannel
+const peerID = uuid()
 interface My_websocket_{
     ws: My_websocket
 }
@@ -56,19 +58,9 @@ const Streams=({ws}: My_websocket_)=>{
         //await navigator.clipboard.writeText(created_roomID);
       }
 
-    const webRTC_init= async()=>{
-        // Turn on my media stream
-        try{
-            my_stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true})
-            const my_video = document.createElement('video')
-            my_video.muted=true // To prevent echo
-            add_video_stream(my_video, my_stream)
-        }
-        catch(err) {
-            console.error("Failed to get local stream", err);
-        }
+    const create_peer_connection= (receiving_peerID: string)=>{
         // Make my peer connection
-        my_peer_connection = new RTCPeerConnection({
+        const my_peer_connection = new RTCPeerConnection({
             iceServers: [ // The STUN server enables clients to find out their public IP address
             {
                 urls: [
@@ -83,7 +75,7 @@ const Streams=({ws}: My_websocket_)=>{
         })
         my_peer_connection.addEventListener("icecandidate", (data: any)=>{
             console.log("ice candidate");
-            ws.send(JSON.stringify({target: "ice_candidate", ice_candidate: data.candidate}))
+            ws.send(JSON.stringify({target: "ice_candidate", ice_candidate: data.candidate, sending_peerID: peerID, receiving_peerID: receiving_peerID}))
         })
         my_peer_connection.addEventListener("addstream", (data: any)=>{
             console.log("received a remote stream");
@@ -91,51 +83,91 @@ const Streams=({ws}: My_websocket_)=>{
             add_video_stream(remote_video, data.stream)
         })
         my_stream.getTracks().forEach((track) => my_peer_connection.addTrack(track, my_stream)) // Add my stream to my peer connection
+        return my_peer_connection
+    }
+
+    const make_my_stream= async()=>{
+        // Turn on my media stream
+        try{
+            my_stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true})
+            const my_video = document.createElement('video')
+            my_video.muted=true // To prevent echo
+            add_video_stream(my_video, my_stream)
+        }
+        catch(err) {
+            console.error("Failed to get local stream", err);
+        }
     }
     
     React.useEffect(()=>{
         // webRTC signaling
-        ws.on("new_peer", async () => {
-            my_data_channel = my_peer_connection.createDataChannel("chat");
-            my_data_channel.addEventListener("message", (event: any) => console.log(event.data));
-            
-            const offer = await my_peer_connection.createOffer();
-            my_peer_connection.setLocalDescription(offer);
-            ws.send(JSON.stringify({target: "offer", offer: offer}))
-            console.log("sent a peer offer");
+        ws.on("new_peer", async (parsed: any) => {
+            // my_data_channel = my_peer_connection.createDataChannel("chat");
+            // my_data_channel.addEventListener("message", (event: any) => console.log(event.data));
+
+            // Createa a my peer connection
+            const peer_connection = create_peer_connection(parsed.new_peerID)
+            peer_connections.set(parsed.new_peerID, peer_connection);
+            // Create an offer
+            const offer = await peer_connection.createOffer();
+            peer_connection.setLocalDescription(offer); // Begin preparing for the ice candidate
+            // Send the offer
+            ws.send(JSON.stringify({target: "offer", offer: offer, new_peerID: parsed.new_peerID, offering_peerID: peerID}))
+            console.log("sent an offer to a remote peer");
         })
 
         ws.on("offer", async (parsed: any) => {
-            my_peer_connection.addEventListener("datachannel", (event) => {
-                my_data_channel = event.channel;
-                my_data_channel.addEventListener("message", (event) =>
-                    console.log(event.data)
-                );
-            });
-            console.log("received an offer");
-            my_peer_connection.setRemoteDescription(parsed.offer);
+            // my_peer_connection.addEventListener("datachannel", (event) => {
+            //     my_data_channel = event.channel;
+            //     my_data_channel.addEventListener("message", (event) =>
+            //         console.log(event.data)
+            //     );
+            // });
 
-            const answer = await my_peer_connection.createAnswer();
-            my_peer_connection.setLocalDescription(answer);
-            ws.send(JSON.stringify({target: "answer", answer: answer}))
-            console.log("sent an answer");
-
-            ws.on("ice_candidate", (parsed: any) => { // must not be executed before setRemoteDescription()
-                console.log("received an ice candidate");
-                my_peer_connection.addIceCandidate(parsed.ice_candidate);
-            });
+            // Createa a remote peer connection
+            const peer_connection = create_peer_connection(parsed.offering_peerID)
+            peer_connections.set(parsed.offering_peerID, peer_connection);
+            peer_connection.setRemoteDescription(parsed.offer);
+            // Create an answer
+            const answer = await peer_connection.createAnswer();
+            peer_connection.setLocalDescription(answer);
+            // Send the answer
+            ws.send(JSON.stringify({target: "answer", answer: answer, new_peerID: peerID, offering_peerID: parsed.offering_peerID}))
+            console.log("received an offer and sent an answer back");
         });
         
         ws.on("answer", (parsed: any) => {
-            console.log("received the answer");
-            my_peer_connection.setRemoteDescription(parsed.answer);
+            // Received answer from a remote user, set it as remote description
+            const peer_connection = peer_connections.get(parsed.new_peerID);
+            if (peer_connection) {
+                peer_connection.setRemoteDescription(parsed.answer);
+            }
+            console.log("received an answer");
         });
+
+        ws.on("ice_candidate", (parsed: any) => { // must not be executed before setRemoteDescription()
+            console.log("received an ice candidate");
+            // Received ICE candidate from a remote user, add it to the peer connection
+            const peer_connection = peer_connections.get(parsed.sending_peerID);
+            if (peer_connection) {
+                peer_connection.addIceCandidate(parsed.ice_candidate);
+            }
+        });
+
+        ws.on('peer_disconnected', (parsed: any) => {
+            // Close the peer connection
+            const peer_connection = peer_connections.get(parsed.peerID);
+            if (peer_connection) {
+                peer_connection.close();
+                peer_connections.delete(parsed.peerID);
+            }
+        })
         
-        const webRTC_init_ = async () => {
-            await webRTC_init();
-            ws.send(JSON.stringify({ target: "join_RTC" }));
+        const webRTC_init = async () => {
+            await make_my_stream(); // What if await is omitted?
+            ws.send(JSON.stringify({ target: "join_RTC", new_peerID: peerID}));
         };
-        webRTC_init_()
+        webRTC_init()
     },[ws])
 
     // React.useEffect(()=>{
