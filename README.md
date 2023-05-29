@@ -21,9 +21,13 @@ React, Typescript
 ### Modules
 ![image](https://github.com/vacu9708/video-conference/assets/67142421/13e663ee-e3cb-421e-93ef-4d89d6d7809b)<br>
 ### WebRTC process
-At first, clients do not know where they are. User2's information is sent to User1 through the signaling server to establish a direct peer to peer connection between clients.<br>
-The STUN server enables clients to find out their public IP address.<br>
 ![image](https://github.com/vacu9708/video-conference/assets/67142421/2b272e18-0118-4457-a3b6-61fcaaf16d12)
+#### Signaling server:
+Initially, clients are not aware of where they are. This is why the signaling server is necessary.<br>
+The signaling server acts as an intermediary that helps clients exchange their network information to establish a direct peer-to-peer connection.<br>
+#### STUN server:
+To establish a direct connection, clients need to know their public IP addresses and other network details.<br>
+By querying the STUN(Session Traversal Utilities for NAT) server, clients can obtain their public IP addresses and gather necessary network information.<br>
 
 # ICE (Interactive Connectivity Establishment)
 In WebRTC, the ICE process involves the exchange of ICE candidates between peers to establish a direct peer-to-peer connection.<br>
