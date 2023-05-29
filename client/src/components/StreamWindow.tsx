@@ -102,12 +102,12 @@ const Streams=({ws}: My_websocket_)=>{
     React.useEffect(()=>{
         // webRTC signaling
         ws.on("new_peer", async (parsed: any) => {
-            // my_data_channel = my_peer_connection.createDataChannel("chat");
-            // my_data_channel.addEventListener("message", (event: any) => console.log(event.data));
-
             // Createa a my peer connection
             const peer_connection = create_peer_connection(parsed.new_peerID)
             peer_connections.set(parsed.new_peerID, peer_connection);
+            // Establish a data channel
+            // data_channel = peer_connection.createDataChannel("chat");
+            // data_channel.addEventListener("message", (event: any) => console.log(event.data));
             // Create an offer
             const offer = await peer_connection.createOffer();
             peer_connection.setLocalDescription(offer);
@@ -117,17 +117,16 @@ const Streams=({ws}: My_websocket_)=>{
         })
 
         ws.on("offer", async (parsed: any) => {
-            // my_peer_connection.addEventListener("datachannel", (event) => {
-            //     my_data_channel = event.channel;
-            //     my_data_channel.addEventListener("message", (event) =>
-            //         console.log(event.data)
-            //     );
-            // });
-
             // Createa a remote peer connection
             const peer_connection = create_peer_connection(parsed.offering_peerID)
             peer_connections.set(parsed.offering_peerID, peer_connection);
             peer_connection.setRemoteDescription(parsed.offer);
+            // Establish a data channel // Same result as the data channel code above
+            // peer_connection.addEventListener("datachannel", (event) => {
+            //     event.channel.addEventListener("message", (event) =>
+            //         console.log(event.data)
+            //     );
+            // });
             // Create an answer
             const answer = await peer_connection.createAnswer();
             peer_connection.setLocalDescription(answer);
@@ -145,7 +144,7 @@ const Streams=({ws}: My_websocket_)=>{
             console.log("received an answer");
         });
 
-        ws.on("ice_candidate", (parsed: any) => { // must not be executed before setRemoteDescription()
+        ws.on("ice_candidate", (parsed: any) => { // should not be executed before setRemoteDescription()
             console.log("received an ice candidate");
             // Received ICE candidate from a remote user, add it to the peer connection
             const peer_connection = peer_connections.get(parsed.sending_peerID);
