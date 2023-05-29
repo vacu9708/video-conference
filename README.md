@@ -2,10 +2,12 @@
 React, Typescript
 # Backend
 - Express.js
-- HTTPS connection for secure video call
+- HTTPs connection for secure video call
 - Websocket: for real-time chat, broker of webRTC
-- WebRTC: for real-time video, audio streaming
-# other tools
+# Peer-to-peer real time communication through webRTC
+- used the native javascript API
+- Multiple connections more than 2 peers can be established
+# others
 - Docker
 - AWS EC2
 - Jenkins
@@ -15,17 +17,13 @@ React, Typescript
 ![image](https://github.com/vacu9708/video-conference/assets/67142421/95e6b781-56ac-488f-aaa3-82f98e556b06)<br>
 ### Modules
 ![image](https://github.com/vacu9708/video-conference/assets/67142421/13e663ee-e3cb-421e-93ef-4d89d6d7809b)<br>
-### WebRTC
+### WebRTC process
 At first, clients do not know where they are. User2's information is sent to User1 through the signaling server to establish a direct peer to peer connection between clients.<br>
 The STUN server enables clients to find out their public IP address.<br>
-![image](https://github.com/vacu9708/video-conference/assets/67142421/ef8e44a8-ee2b-4b15-98bb-e1566496f0cf)
-
+![image](https://github.com/vacu9708/video-conference/assets/67142421/2b272e18-0118-4457-a3b6-61fcaaf16d12)
 
 # WebRTC and Websocket
 ![image](https://github.com/vacu9708/video-conference/assets/67142421/ef40bb16-f8a0-4c98-8f1b-9b20d589bbac)
-
-# Page for creating a conference room
-![image](https://github.com/vacu9708/video-conference/assets/67142421/f52e20b6-92ee-43cd-904e-822bef206e13)
 
 # Conference room
 ![image](https://user-images.githubusercontent.com/67142421/205711740-6953fe9b-8180-4f71-ad41-c967d2c968e9.png)
