@@ -41,6 +41,10 @@ The purpose of having multiple candidates is to increase the chances of successf
 # WebRTC and Websocket
 ![image](https://github.com/vacu9708/video-conference/assets/67142421/ef40bb16-f8a0-4c98-8f1b-9b20d589bbac)
 
+# How to run this app
+1. Install Docker
+2. Execute the commands that are in build.bat
+
 # Future plan
 - Deprecate node.js code and rewrite all the code in spring boot
 - Add login/registration page to store the nickname.
