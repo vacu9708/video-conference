@@ -48,4 +48,3 @@ The purpose of having multiple candidates is to increase the chances of successf
 # Future plan
 - Deprecate node.js code and rewrite all the code in spring boot
 - Add login/registration page to store the nickname.
-- Think about preventing CSRF, XSS attacks
